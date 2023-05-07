@@ -1,5 +1,8 @@
+import pystray
 from tkinter import *
+from PIL import Image
 import subprocess as s
+from pystray import MenuItem as item
 from tkinter import filedialog as f
 
 class SERVER():
@@ -79,6 +82,24 @@ img = PhotoImage(file='icon.png')
 janela.iconphoto(False, img)
 server = SERVER(janela)
 server.inicio()
+def quit_window(icon, item):
+    icon.stop()
+    janela.destroy()
+
+def show_window(icon, item):
+    icon.stop()
+    janela.after(0,janela.deiconify)
+
+def withdraw_window():  
+    janela.withdraw()
+    image = Image.open("icon.png")
+    menu = (item('Quit', quit_window), item('Show', show_window))
+    icon = pystray.Icon("name", image, "title", menu)
+    icon.run()
+
+
+
+janela.protocol("WM_DELETE_WINDOW", withdraw_window)
 janela.mainloop()
 if hasattr(server, 'subprocesso'):
     server.subprocesso.terminate()
